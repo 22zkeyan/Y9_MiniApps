@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+using System.Timers;
 
 namespace Y9_MiniApps
 {
@@ -42,7 +43,8 @@ namespace Y9_MiniApps
 
             }
         }
-        static Timer timer;
+        static System.Timers.Timer? timer;
+        static int secondsLeft = 60;
         static void TimesTableGame()
         {
             //setting up numbers
@@ -51,11 +53,33 @@ namespace Y9_MiniApps
             int num2 = r.Next(1, 11);
             int sum = num1 * num2;
 
-            timer = new Timer(1000);
+            timer = new System.Timers.Timer(1000); // Fully qualified name
+            timer.Elapsed += OnTimedEvent;
+            timer.AutoReset = true;
+            timer.Enabled = true;
             Console.WriteLine();
+        }
+        static void OnTimedEvent(Object source, ElapsedEventArgs e)
+        {
+            secondsLeft--;
+            Console.WriteLine($"Time left: {secondsLeft} seconds");
+
+            if (secondsLeft <= 0)
+            {
+                Console.WriteLine("Time's up!");
+                timer?.Stop();
+                // Optionally exit or reset the game here
+            }
         }
         static void ShapesAreaCalc()
         {
+            Console.WriteLine("What shape do you want? Options: " +
+                "\n- Square" + 
+                "\n- Rectangle" + 
+                "\n- Triangle" + 
+                "\n- Trapezium" + 
+                "\n- BONUS cuboid surface area");
+            string input = Console.ReadLine()!;
 
         }
         static void Main(string[] args)
